@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<routes>
+    <route url="/" module="Vinyls" action="index"></route>
+    <route url="/vinyle-([0-9]+)\.html" module="Vinyls" action="show" vars="id"></route>
+    <route url="/tous-les-vinyles\.html" module="Vinyls" action="showAllVinyls"></route>
+    <route url="/vinyles-de-([a-zA-z0-9\-]+)\.html" module="Vinyls" action="showVinylsFromArtist" vars="artist"></route>
+    <route url="/vinyles-de-l'annee-([0-9]+)\.html" module="Vinyls" action="showFromYear" vars="year"></route>
+    <route url="/ajout-vinyle\.html" module="Vinyls" action="insertVinyl"></route>
+    <route url="/modif-vinyle\.html" module="Vinyls" action="editVinyl"></route>
+</routes>

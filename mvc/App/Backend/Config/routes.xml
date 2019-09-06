@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<routes>
+    <route url="/admin/" module="Vinyls" action="index"></route>
+    <route url="/admin/insert-vinyl.html" module="Vinyls" action="insertVinyl"></route>
+    <route url="/admin/update-vinyl-([0-9]+)\.html" module="Vinyls" action="updateVinyl" vars="id"></route>
+    <route url="/admin/delete-vinyl-([0-9]+)\.html" module="Vinyls" action="deleteVinyl" vars="id"></route>
+    <route url="/admin/vinyl-([0-9]+)\.html" module="Vinyls" action="show" vars="id"></route>
+    <route url="/admin/vinyls-from-([a-zA-z0-9\-]+)\.html" module="Vinyls" action="showVinylsFromArtist" vars="artist"></route>
+    <route url="/admin/vinyls-recorded-in-([0-9]+)\.html" module="Vinyls" action="showFromYear" vars="year"></route>
+    <route url="/admin/vinyls-issued-in-([0-9]+)\.html" module="Vinyls" action="showFromYearEdition" vars="year"></route>
+    <route url="/admin/add-song-to-([0-9]+)\.html" module="Songs" action="addSongToVinyl" vars="idVinyl"></route>
+    <route url="/admin/update-song-([0-9]+)\.html" module="Songs" action="updateSong" vars="id"></route>
+    <route url="/admin/delete-song-([0-9]+)\.html" module="Songs" action="deleteSong" vars="id"></route>
+
+</routes>
