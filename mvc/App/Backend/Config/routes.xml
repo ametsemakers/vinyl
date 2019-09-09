@@ -11,5 +11,5 @@
     <route url="/admin/add-song-to-([0-9]+)\.html" module="Songs" action="addSongToVinyl" vars="idVinyl"></route>
     <route url="/admin/update-song-([0-9]+)\.html" module="Songs" action="updateSong" vars="id"></route>
     <route url="/admin/delete-song-([0-9]+)\.html" module="Songs" action="deleteSong" vars="id"></route>
-
+    <route url="/admin/search.html" module="Vinyls" action="searchVinyl" vars="query"></route>
 </routes>

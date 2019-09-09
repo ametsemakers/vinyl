@@ -143,4 +143,23 @@ class VinylManagerPDO extends VinylManager
 
         return $listVinyl;
     }
+
+    public function searchVinyl($query)
+    {
+        $requete = $this->dao->prepare('SELECT idVinyl, artist, titleAlbum, label, country, catNb, yearOriginal, yearEdition FROM vinyl WHERE artist LIKE :art XOR titleAlbum LIKE :title XOR label LIKE :lab XOR country LIKE :country');
+
+        $requete->bindValue(':art', $query, \PDO::PARAM_STR);
+        $requete->bindValue(':title', $query, \PDO::PARAM_STR);
+        $requete->bindValue(':lab', $query, \PDO::PARAM_STR);
+        $requete->bindValue(':country', $query, \PDO::PARAM_STR);
+
+        $requete->execute();
+
+        $requete->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Vinyl');
+        $listVinyl = $requete->fetchAll();
+                
+        $requete->closeCursor();
+                
+        return $listVinyl;
+    }
 }

@@ -46,8 +46,8 @@
           <?php } ?>
           
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="search" placeholder="Votre recherche ..." aria-label="Search">
+        <form action="/admin/search.html" method="post" class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="text" name="query" id="query" placeholder="Votre recherche ..." aria-label="Search">
           <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Chercher !</button>
         </form>
       </div>

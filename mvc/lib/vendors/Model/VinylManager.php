@@ -93,4 +93,11 @@ abstract class VinylManager extends Manager
      * @return void
      */
     abstract protected function updateVinyl(Vinyl $vinyl);
+
+    /**
+     * Méthode permettant de chercher un vinyle par mot clé
+     * @param $query Le mot clé
+     * @return array la liste des vinyles
+     */
+    abstract public function searchVinyl($query);
 }

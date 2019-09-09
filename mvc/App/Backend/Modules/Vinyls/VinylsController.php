@@ -139,6 +139,27 @@ class VinylsController extends BackController
         $this->page->addVar('listVinyls', $listVinyls);
     }
 
+    public function executeSearchVinyl(HTTPRequest $request)
+    {
+        if ($request->postExists('query'))
+        {
+            $manager = $this->managers->getManagerOf('Vinyl');
+
+            $query = htmlspecialchars('%' . trim($request->postData('query')) . '%');
+
+            $listVinyls = $manager->searchVinyl($query);
+            
+            if ($listVinyls == null)
+            {
+                $this->app->user()->setFlash('Le mot recherché ne se trouve pas dans la base de données.');
+
+                $this->app->httpResponse()->redirect('.');
+            }
+
+            $this->page->addVar('listVinyls', $listVinyls);
+        }
+    }
+
     public function redirectToSongs(HTTPRequest $request)
     {
         
