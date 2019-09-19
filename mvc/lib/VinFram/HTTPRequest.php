@@ -40,6 +40,8 @@ class HTTPRequest extends ApplicationComponent
 
     public function requestURI()
     {
+        //var_dump($_SERVER['REQUEST_URI']);
+        //exit;
         return $_SERVER['REQUEST_URI'];
     }
 }

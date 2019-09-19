@@ -97,11 +97,13 @@ class VinylManagerPDO extends VinylManager
         return $listVinyl;
     }
 
-    public function getAlbumsFromArtist($artist)
+    public function getAlbumsFromArtist($artist, $limit, $offset)
     {
-        $requete = $this->dao->prepare('SELECT idVinyl, artist, titleAlbum, label, country, catNb, yearOriginal, yearEdition FROM vinyl WHERE artist = :artist ORDER BY artist, yearOriginal');
+        $requete = $this->dao->prepare('SELECT SQL_CALC_FOUND_ROWS idVinyl, artist, titleAlbum, label, country, catNb, yearOriginal, yearEdition FROM vinyl WHERE artist = :artist ORDER BY artist, yearOriginal LIMIT :maxResults OFFSET :startFrom');
 
         $requete->bindValue(':artist', $artist, \PDO::PARAM_STR);
+        $requete->bindValue(':maxResults', $limit, \PDO::PARAM_INT);
+        $requete->bindValue(':startFrom', $offset, \PDO::PARAM_INT);
         $requete->execute();
 
         $requete->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Vinyl');
@@ -114,11 +116,13 @@ class VinylManagerPDO extends VinylManager
         return $listVinyl;
     }
 
-    public function getFromYear($year)
+    public function getFromYear($year, $limit, $offset)
     {
-        $requete = $this->dao->prepare('SELECT idVinyl, artist, titleAlbum, label, country, catNb, yearOriginal, yearEdition FROM vinyl WHERE yearOriginal = :yearOri ORDER BY artist, yearOriginal');
+        $requete = $this->dao->prepare('SELECT SQL_CALC_FOUND_ROWS idVinyl, artist, titleAlbum, label, country, catNb, yearOriginal, yearEdition FROM vinyl WHERE yearOriginal = :yearOri ORDER BY artist, yearOriginal LIMIT :maxResults OFFSET :startFrom');
         
         $requete->bindValue(':yearOri', $year, \PDO::PARAM_STR);
+        $requete->bindValue(':maxResults', $limit, \PDO::PARAM_INT);
+        $requete->bindValue(':startFrom', $offset, \PDO::PARAM_INT);
         $requete->execute();
 
         $requete->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Vinyl');
@@ -130,11 +134,13 @@ class VinylManagerPDO extends VinylManager
         return $listVinyl;
     }
 
-    public function getFromYearEdition($year)
+    public function getFromYearEdition($year, $limit, $offset)
     {
-        $requete = $this->dao->prepare('SELECT idVinyl, artist, titleAlbum, label, country, catNb, yearOriginal, yearEdition FROM vinyl WHERE yearEdition = :yearEdi ORDER BY artist, yearEdition');
+        $requete = $this->dao->prepare('SELECT SQL_CALC_FOUND_ROWS idVinyl, artist, titleAlbum, label, country, catNb, yearOriginal, yearEdition FROM vinyl WHERE yearEdition = :yearEdi ORDER BY artist, yearEdition LIMIT :maxResults OFFSET :startFrom');
 
         $requete->bindValue(':yearEdi', $year, \PDO::PARAM_STR);
+        $requete->bindValue(':maxResults', $limit, \PDO::PARAM_INT);
+        $requete->bindValue(':startFrom', $offset, \PDO::PARAM_INT);
         $requete->execute();
 
         $requete->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Vinyl');

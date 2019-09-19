@@ -2,9 +2,9 @@
 <routes>
     <route url="/" module="Vinyls" action="index"></route>
     <route url="/vinyle-([0-9]+)\.html" module="Vinyls" action="show" vars="id"></route>
-    <route url="/tous-les-vinyles\.html" module="Vinyls" action="showAllVinyls"></route>
-    <route url="/vinyles-de-([a-zA-z0-9\-]+)\.html" module="Vinyls" action="showVinylsFromArtist" vars="artist"></route>
-    <route url="/vinyles-de-l'annee-([0-9]+)\.html" module="Vinyls" action="showFromYear" vars="year"></route>
+    <route url="/tous-les-vinyles/page=([0-9]+)\.html" module="Vinyls" action="showAllVinyls" vars="page"></route>
+    <route url="/vinyles-de-([a-zA-z0-9\-\=\/]+)\.html" module="Vinyls" action="showVinylsFromArtist" vars="page"></route>
+    <route url="/vinyles-par-annee-([0-9\/a-z\=]+)\.html" module="Vinyls" action="showFromYear" vars="page"></route>
     <route url="/ajout-vinyle\.html" module="Vinyls" action="insertVinyl"></route>
     <route url="/modif-vinyle\.html" module="Vinyls" action="editVinyl"></route>
 </routes>

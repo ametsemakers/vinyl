@@ -16,7 +16,7 @@
               Vinyles
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="/tous-les-vinyles.html">Liste</a>
+              <a class="dropdown-item" href="/tous-les-vinyles/page=1.html">Liste</a>
               <?php if ($user->isAuthenticated()) { ?>
                 <a class="dropdown-item" href="/admin/insert-vinyl.html">Ajouter</a>
               <?php } ?>

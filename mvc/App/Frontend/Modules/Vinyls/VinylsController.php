@@ -3,6 +3,7 @@ namespace App\Frontend\Modules\Vinyls;
 
 use \VinFram\BackController;
 use \VinFram\HTTPRequest;
+use \VinFram\Paginator;
 use \Entity\Vinyl;
 use \Entity\Song;
 
@@ -42,37 +43,94 @@ class VinylsController extends BackController
 
     public function executeShowAllVinyls(HTTPRequest $request)
     { 
-        // On récupère le manager des vinyles.
+        $page = $request->getData('page');
+
         $manager = $this->managers->getManagerOf('Vinyl');
 
-        $listVinyls = $manager->getAll();
+        $limit = 20;
 
-        // on ajoute la variable $listVinyls à la vue.
+        $offset = ($page - 1) * $limit;
+
+        $listVinyls = $manager->getAll($limit, $offset);
+
+        $NbVinyls = $manager->countSearchResults();
+
+        $path = "/tous-les-vinyles/page=";
+            
+        $paginator = new Paginator($page, $limit, $NbVinyls);
+
         $this->page->addVar('listVinyls', $listVinyls);
+        $this->page->addVar('links', $paginator->getHtml($path));
     }
 
     public function executeShowVinylsFromArtist(HTTPRequest $request)
     {
         $manager = $this->managers->getManagerOf('Vinyl');
         
-        $artist = $request->getData('artist');
+        $dataUrl = $request->getData('page');
+
+        $page = str_replace('=', '', (strpbrk( (strstr($dataUrl, '/')), '=')));
+
+        $artist = strstr($dataUrl, '/', true);
+
         if (strstr($artist, '-'))
-            {
-                $artist = str_replace('-',' ',$artist);
-            }
+        {
+            $artist = str_replace('-',' ',$artist);
+        }
+
+        $limit = 8;
+
+        $offset = ($page - 1) * $limit;
         
-        $listVinyls = $manager->getAlbumsFromArtist($artist);
+        $listVinyls = $manager->getAlbumsFromArtist($artist, $limit, $offset);
+
+        $NbVinyls = $manager->countSearchResults();
+
+        $path = "/vinyles-de-".$artist."/page=";
+            
+        $paginator = new Paginator($page, $limit, $NbVinyls);
         
         $this->page->addVar('listVinyls', $listVinyls);
+        $this->page->addVar('links', $paginator->getHtml($path));
     }
 
     public function executeShowFromYear(HTTPRequest $request)
     {
         $manager = $this->managers->getManagerOf('Vinyl');
+
+        $dataUrl = $request->getData('page');
+
+        $dataUrlBackup = $dataUrl;
+
+        if (strlen($dataUrl) <= 5)
+        {
+            $page = $dataUrl;
+
+            $year = strstr($dataUrlBackup, '/', true);
+        }
+        else
+        {
+            $page = str_replace('=', '', (strpbrk( (strstr($dataUrl, '/')), '=')));
+
+            $year = strstr($dataUrl, '/', true);
+        }
+
+        $limit = 4;
+
+        $offset = ($page - 1) * $limit;
         
-        $listVinyls = $manager->getFromYear($request->getData('year'));
+        $listVinyls = $manager->getFromYear($year, $limit, $offset);
+
+        $nbVinyls = $manager->countSearchResults();
+
+        $path = "/vinyles-par-annee-".$year."/page=";
+            
+        $paginator = new Paginator($page, $limit, $nbVinyls);
         
         $this->page->addVar('listVinyls', $listVinyls);
+        $this->page->addVar('links', $paginator->getHtml($path));
+        $this->page->addVar('nbVinyls', $nbVinyls);
+
     }
 
     public function executeInsertVinyl(HTTPRequest $request)

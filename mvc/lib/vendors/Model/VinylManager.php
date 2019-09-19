@@ -38,21 +38,21 @@ abstract class VinylManager extends Manager
      * @param $artist Le nom de l'artiste à récupérer
      * @return array La liste des vinyles
      */
-    abstract public function getAlbumsFromArtist($artist);
+    abstract public function getAlbumsFromArtist($artist, $limit, $offset);
 
     /**
      * Méthode retournant tous les vinyles d'une année.
      * @param $year L'année à interroger
      * @return array La liste des vinyles
      */
-    abstract public function getFromYear($year);
+    abstract public function getFromYear($year, $limit, $offset);
 
     /**
      * Méthode retournant les vinyles édités dans une année spécifique.
      * @param $year L'année à interroger
      * @return array La liste des vinyles
      */
-    abstract public function getFromYearEdition($year);
+    abstract public function getFromYearEdition($year, $limit, $offset);
 
     /**
      * Méthode permettant d'ajouter un vinyle.
