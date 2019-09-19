@@ -4,4 +4,10 @@
     </div>
 </div>
 
-<?php include __DIR__.'/../../../Templates/layoutTable.php';
+<?php include __DIR__.'/../../../Templates/layoutTable.php'; ?>
+
+<div class="row">
+    <div class="col-md-12">
+        <?php echo $links ?>
+    </div>
+</div>

@@ -75,4 +75,17 @@ abstract class SongManager extends Manager
      * @return void
      */
     abstract public function deleteFromVinyl($vinyl);
+
+    /**
+     * Méthode permettant de chercher une chanson par mot clé
+     * @param $query Le mot clé
+     * @return array la liste des chansons
+     */
+    abstract public function searchSong($query, $limit, $offset);
+
+    /**
+     * Méthode qui retourne le nombre de la dernière requête.
+     * @return int
+     */
+    abstract public function countSearchResults();
 }

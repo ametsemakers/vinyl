@@ -27,7 +27,7 @@
             ?>
                 
                 <tr>
-                    <th scope="row"><?php echo $i; $i++; ?></th>
+                    <th scope="row"><?php echo $counter; $counter++; ?></th>
                     <td><a href="/admin/vinyls-from-<?php echo $vinyl->artistRoute(); ?>.html"><?php echo $vinyl->artist(); ?></a></td>
                     <td><a href="/admin/vinyl-<?php echo $vinyl->idVinyl(); ?>.html"><?php echo $vinyl->titleAlbum(); ?></a></td>
                     <td><a href="/admin/vinyls-recorded-in-<?php echo $vinyl->yearOriginal(); ?>.html"><?php echo $vinyl->yearOriginal(); ?></a></td>

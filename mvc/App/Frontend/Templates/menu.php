@@ -1,6 +1,6 @@
 <div class="row">
-  <div class="col-md-12">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="width: 100%;">
       <!-- <a class="navbar-brand" href="#">Navbar</a> -->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -36,7 +36,7 @@
             </div>
           </li>
           <li class="nav-item active">
-            <a class="nav-link" href="/admin/">Espace admin<span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/admin/page=1.html">Espace admin<span class="sr-only">(current)</span></a>
           </li>
 
           <?php if ($user->isAuthenticated()) { ?>   
@@ -52,5 +52,5 @@
         </form>
       </div>
     </nav>
-  </div>
+  
 </div>

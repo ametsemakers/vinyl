@@ -99,8 +99,38 @@ class SongManagerPDO extends SongManager
         $this->dao->exec('DELETE FROM SONG WHERE idVinyl ='.(int) $vinyl);
     }
 
+    public function searchSong($query, $limit, $offset)
+    {
+        //$requete = $this->dao->prepare('SELECT song.idSong, song.side, song.position, song.titleSong, song.alternateInfo, song.artist, song.feat, song.titleAlbum, vinyl.idVinyl, vinyl.label, vinyl.country FROM song LEFT JOIN vinyl ON song.idvinyl = vinyl.idvinyl  WHERE song.titleSong LIKE :titleSong XOR song.alternateInfo LIKE :altInfo XOR song.feat LIKE :feat XOR song.artist LIKE :art XOR song.titleAlbum LIKE :titleAlbum XOR vinyl.label LIKE :lab XOR vinyl.country LIKE :country');
+        $requete = $this->dao->prepare('SELECT SQL_CALC_FOUND_ROWS idSong, side, position, titleSong, alternateInfo, artist, feat, titleAlbum, idVinyl FROM song WHERE titleSong LIKE :titleSong XOR alternateInfo LIKE :altInfo XOR artist LIKE :art XOR feat LIKE :feat XOR titleAlbum LIKE :titleAlbum LIMIT :maxResults OFFSET :startFrom');
+
+        $requete->bindValue(':titleSong', $query, \PDO::PARAM_STR);
+        $requete->bindValue(':altInfo', $query, \PDO::PARAM_STR);
+        $requete->bindValue(':feat', $query, \PDO::PARAM_STR);
+        $requete->bindValue(':art', $query, \PDO::PARAM_STR);
+        $requete->bindValue(':titleAlbum', $query, \PDO::PARAM_STR);
+        $requete->bindValue(':maxResults', $limit, \PDO::PARAM_INT);
+        $requete->bindValue(':startFrom', $offset, \PDO::PARAM_INT);
+        
+        $requete->execute();
+
+        $requete->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Song');
+        $listSong = $requete->fetchAll();
+                
+        $requete->closeCursor();
+                
+        return $listSong;
+    }
+
     public function count()
     {
         return $this->dao->query('SELECT COUNT(*) FROM song')->fetchColumn();
+    }
+
+    public function countSearchResults()
+    {
+        $results = $this->dao->query('SELECT FOUND_ROWS()');
+
+        return $results->fetchColumn();
     }
 }

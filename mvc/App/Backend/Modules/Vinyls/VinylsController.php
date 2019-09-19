@@ -3,19 +3,36 @@ namespace App\Backend\Modules\Vinyls;
 
 use \VinFram\BackController;
 use \VinFram\HttpRequest;
+use \VinFram\Paginator;
 use \Entity\Vinyl;
 use \Entity\Song;
 
 class VinylsController extends BackController
 {
     public function executeIndex(HTTPRequest $request)
-    {
-        $this->page->addVar('title', 'Gestion des vinyles');
-
+    {        
+        $page = $request->getData('page');
+        
         $manager = $this->managers->getManagerOf('Vinyl');
 
-        $this->page->addVar('listVinyls', $manager->getAll());
-        $this->page->addVar('count', $manager->count());
+        $limit = 12;
+
+        $offset = ($page - 1) * $limit;
+
+        $listVinyls = $manager->getAll($limit, $offset);
+
+        $NbVinyls = $manager->countSearchResults();
+
+        $path = "/admin/page=";
+            
+        $paginator = new Paginator($page, $limit, $NbVinyls);
+
+        $this->page->addVar('title', 'Gestion des vinyles');
+        $this->page->addVar('listVinyls', $listVinyls);
+        $this->page->addVar('count', $NbVinyls);
+        $this->page->addVar('links', $paginator->getHtml($path));
+        $this->page->addVar('counter', $paginator->getCounter());
+
     }
 
     public function executeInsertVinyl(HTTPRequest $request)
@@ -139,24 +156,103 @@ class VinylsController extends BackController
         $this->page->addVar('listVinyls', $listVinyls);
     }
 
-    public function executeSearchVinyl(HTTPRequest $request)
+    public function executeSearch(HTTPRequest $request)
     {
         if ($request->postExists('query'))
-        {
-            $manager = $this->managers->getManagerOf('Vinyl');
+        {           
+            $managerVinyl = $this->managers->getManagerOf('Vinyl');
+
+            $managerSong = $this->managers->getManagerOf('Song');
 
             $query = htmlspecialchars('%' . trim($request->postData('query')) . '%');
 
-            $listVinyls = $manager->searchVinyl($query);
+            $page = (!empty($request->postData('page')) ? $request->postData('page') : 1);
             
-            if ($listVinyls == null)
+            $limit = 10;
+
+            $offset = ($page - 1) * $limit;
+
+            $listVinyls = $managerVinyl->searchVinyl($query, $limit, $offset);
+
+            $NbVinyls = $managerSong->countSearchResults();
+
+            $listSongs = $managerSong->searchSong($query, $limit, $offset);
+            
+            if ($listVinyls == null && $listSongs == null)
             {
                 $this->app->user()->setFlash('Le mot recherché ne se trouve pas dans la base de données.');
 
                 $this->app->httpResponse()->redirect('.');
             }
+            $query = $request->postData('query');
+
+            $nbSongs = $managerSong->countSearchResults();
+
+            $nbPages = ceil($nbSongs / $limit);
+
+            $path = "/admin/search/query=".$query."/page=";
+            
+            $paginator = new Paginator($page, $limit, $nbSongs, $nbPages);
+
+            $links = $paginator->getHtml($path);
+            
+            $this->page->addVar('listVinyls', $listVinyls);
+            $this->page->addVar('listSongs', $listSongs);
+            $this->page->addVar('query', $query);
+            $this->page->addVar('page', $page);
+            $this->page->addVar('nbSongs', $nbSongs);
+            $this->page->addVar('nbVinyls', $NbVinyls);
+            $this->page->addVar('nbPages', $nbPages);
+            $this->page->addVar('links', $links);
+
+        }
+        else
+        {
+            $managerVinyl = $this->managers->getManagerOf('Vinyl');
+
+            $managerSong = $this->managers->getManagerOf('Song');
+
+            $dataUrl = $request->getData('page');
+            // séparation du mot recherché et le numéro de page contenu dans l'url.
+            $page = str_replace('=', '', (strpbrk( (strstr($dataUrl, '/')), '=')));
+            
+            $query = str_replace('=', '', (strpbrk( (strstr($dataUrl, '/', true)), '=')));
+              
+            // je garde la valeur de $query pour plus tard
+            $queryBackUp = $query;
+
+            $query = htmlspecialchars('%' . trim($query) . '%');
+
+            $limit = 10;
+
+            $offset = ($page - 1) * $limit;
+
+            $listVinyls = $managerVinyl->searchVinyl($query, $limit, $offset);
+
+            $NbVinyls = $managerSong->countSearchResults();
+
+            $listSongs = $managerSong->searchSong($query, $limit, $offset);
+
+            $nbSongs = $managerSong->countSearchResults();
+            
+            $query = $queryBackUp;
+            
+            $nbPages = ceil($nbSongs / $limit);
+
+            $path = "/admin/search/query=".$query."/page=";
+            
+            $paginator = new Paginator($page, $limit, $nbSongs, $nbPages);
+
+            $links = $paginator->getHtml($path);
 
             $this->page->addVar('listVinyls', $listVinyls);
+            $this->page->addVar('listSongs', $listSongs);
+            $this->page->addVar('query', $query);
+            $this->page->addVar('page', $page);
+            $this->page->addVar('nbSongs', $nbSongs);
+            $this->page->addVar('nbVinyls', $NbVinyls);
+            $this->page->addVar('nbPages', $nbPages);
+            $this->page->addVar('links', $links);
         }
     }
 

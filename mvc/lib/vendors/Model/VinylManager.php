@@ -31,7 +31,7 @@ abstract class VinylManager extends Manager
      * Méthode retournant tous les vinyles.
      * @return array La liste des vinyles
      */
-    abstract public function getAll();
+    abstract public function getAll($limit, $offset);
 
     /**
      * Méthode retournant tous les vinyles d'une artiste.
@@ -99,5 +99,11 @@ abstract class VinylManager extends Manager
      * @param $query Le mot clé
      * @return array la liste des vinyles
      */
-    abstract public function searchVinyl($query);
+    abstract public function searchVinyl($query, $limit, $offset);
+
+    /**
+     * Méthode qui retourne le nombre de la dernière requête.
+     * @return int
+     */
+    abstract public function countSearchResults();
 }

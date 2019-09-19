@@ -90,17 +90,7 @@ class VinylsController extends BackController
                 'yearOriginal' => $request->postData('yrOriginal'),
                 'yearEdition' => $request->postData('yrEdition')
             ]);
-            // $vinyl->hydrate([
-            //     'artist' => $request->postData('artist'),
-            //     'titleAlbum' => $request->postData('title'),
-            //     'label' => $request->postData('label'),
-            //     'country' => $request->postData('country'),
-            //     'catNb' => $request->postData('catNb'),
-            //     'yearOriginal' => $request->postData('yrOriginal'),
-            //     'yearEdition' => $request->postData('yrEdition')
-            // ]);
-            //var_dump($request->postData('artist'));
-            //exit;
+            
             if ($vinyl->isValid())
             {
                 $this->managers->getManagerOf('Vinyl')->save($vinyl);

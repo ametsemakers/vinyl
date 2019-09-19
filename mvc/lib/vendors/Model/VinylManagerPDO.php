@@ -81,11 +81,13 @@ class VinylManagerPDO extends VinylManager
         return null;
     }
 
-    public function getAll()
+    public function getAll($limit, $offset)
     {
-        $sql = 'SELECT idVinyl, artist, titleAlbum, label, country, catNb, yearOriginal, yearEdition FROM vinyl ORDER BY artist, yearOriginal';
+        $requete = $this->dao->prepare('SELECT SQL_CALC_FOUND_ROWS idVinyl, artist, titleAlbum, label, country, catNb, yearOriginal, yearEdition FROM vinyl ORDER BY artist, yearOriginal LIMIT :maxResults OFFSET :startFrom');
 
-        $requete = $this->dao->query($sql);
+        $requete->bindValue(':maxResults', $limit, \PDO::PARAM_INT);
+        $requete->bindValue(':startFrom', $offset, \PDO::PARAM_INT);
+        $requete->execute();
         $requete->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Vinyl');
 
         $listVinyl = $requete->fetchAll();
@@ -144,14 +146,16 @@ class VinylManagerPDO extends VinylManager
         return $listVinyl;
     }
 
-    public function searchVinyl($query)
+    public function searchVinyl($query, $limit, $offset)
     {
-        $requete = $this->dao->prepare('SELECT idVinyl, artist, titleAlbum, label, country, catNb, yearOriginal, yearEdition FROM vinyl WHERE artist LIKE :art XOR titleAlbum LIKE :title XOR label LIKE :lab XOR country LIKE :country');
+        $requete = $this->dao->prepare('SELECT SQL_CALC_FOUND_ROWS idVinyl, artist, titleAlbum, label, country, catNb, yearOriginal, yearEdition FROM vinyl WHERE artist LIKE :art XOR titleAlbum LIKE :title XOR label LIKE :lab XOR country LIKE :country LIMIT :maxResults OFFSET :startFrom');
 
         $requete->bindValue(':art', $query, \PDO::PARAM_STR);
         $requete->bindValue(':title', $query, \PDO::PARAM_STR);
         $requete->bindValue(':lab', $query, \PDO::PARAM_STR);
         $requete->bindValue(':country', $query, \PDO::PARAM_STR);
+        $requete->bindValue(':maxResults', $limit, \PDO::PARAM_INT);
+        $requete->bindValue(':startFrom', $offset, \PDO::PARAM_INT);
 
         $requete->execute();
 
@@ -161,5 +165,12 @@ class VinylManagerPDO extends VinylManager
         $requete->closeCursor();
                 
         return $listVinyl;
+    }
+
+    public function countSearchResults()
+    {
+        $results = $this->dao->query('SELECT FOUND_ROWS()');
+
+        return $results->fetchColumn();
     }
 }
