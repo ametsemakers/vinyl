@@ -97,7 +97,7 @@ class VinylsController extends BackController
 
             $this->app->user()->setFlash($vinyl->isNew() ? 'Le vinyle a été ajouté.' : 'Le vinyle a été modifié.');
 
-            $this->app->httpResponse()->redirect('.');
+            $this->app->httpResponse()->redirect('/admin/add-song-to-'.$vinyl->idVinyl().'.html');
         }
         else
         {

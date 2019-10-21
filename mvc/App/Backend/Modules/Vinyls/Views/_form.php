@@ -104,7 +104,7 @@
                     <button type="submit" name="ajouter" class="btn btn-dark my-1">Enregistrer</button>
                 </div>
                 <div class="col-md-2 offset-md-3">
-                    <a href="/admin/" class="btn btn-warning my-1">Annuler</a>
+                    <a href="/admin/page=1.html" class="btn btn-warning my-1">Annuler</a>
                 </div>
             </div>
             <?php
